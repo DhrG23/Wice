@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Wice.Views;
 
-public partial class TopBarWindow : UserControl
+public partial class TopBarWindow : Window
 {
     public TopBarWindow()
     {

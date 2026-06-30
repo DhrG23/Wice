@@ -3,7 +3,7 @@
         xmlns:widgets="using:Wice.Views.Widgets"
         x:Class="Wice.Views.TopBarWindow"
         Title="Wice Top Bar" Height="40" Width="1920"
-        SystemDecorations="None" 
+        WindowDecorations="None" 
         Topmost="True"
         Background="Transparent" 
         TransparencyLevelHint="Transparent"
