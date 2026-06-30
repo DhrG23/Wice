@@ -43,6 +43,17 @@ Currently under active development.
 
 Create a polished Windows desktop shell inspired by Caelestia Shell that feels native to Windows.
 
----
+## License
 
-© 2026 DhrG23. All Rights Reserved.
+Wice is licensed under the **PolyForm Noncommercial License 1.0.0**.
+
+You are free to use, modify, and share Wice for **non-commercial purposes** under the terms of the license.
+
+Commercial use requires prior written permission from the copyright holder.
+
+See the [LICENSE](LICENSE) file for details.
+
+---
+Copyright © 2026 DhrG23.
+
+Commercial use of this project is prohibited without explicit written permission.
