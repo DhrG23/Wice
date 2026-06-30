@@ -61,4 +61,3 @@ See the [LICENSE](LICENSE) file for details.
 ---
 Copyright © 2026 DhrG23.
 
-Commercial use of this project is prohibited without explicit written permission.
