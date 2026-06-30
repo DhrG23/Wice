@@ -1,5 +1,10 @@
 # Wice
 
+![Platform](https://img.shields.io/badge/platform-Windows-blue)
+![Language](https://img.shields.io/badge/C%23-.NET%2010-purple)
+![UI](https://img.shields.io/badge/UI-Avalonia-orange)
+![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-red)
+
 > A modern Windows desktop shell inspired by Caelestia Shell.
 
 > 🚧 Work in Progress
