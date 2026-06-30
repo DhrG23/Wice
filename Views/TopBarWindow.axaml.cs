@@ -1,9 +1,8 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 namespace Wice.Views;
 
+// Change 'UserControl' to 'Window'
 public partial class TopBarWindow : Window
 {
     public TopBarWindow()

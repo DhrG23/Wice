@@ -2,17 +2,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:widgets="using:Wice.Views.Widgets"
         x:Class="Wice.Views.TopBarWindow"
-        Title="Wice Top Bar" Height="40" Width="1920"
-        WindowDecorations="None" 
+        Title="Wice Top Bar" Height="40"
+        SystemDecorations="None" 
         Topmost="True"
         Background="Transparent" 
         TransparencyLevelHint="Transparent"
         WindowStartupLocation="Manual">
 
-    <!-- Container for multiple modular widgets -->
-    <StackPanel Orientation="Horizontal" Background="#CC1E1E1E" HorizontalAlignment="Center">
-        <widgets:ColoredWidget />
-        <widgets:ColoredWidget /> <!-- You can now replicate this easily -->
-        <widgets:ColoredWidget />
-    </StackPanel>
+    <Grid Background="#CC1E1E1E">
+        <!-- Placeholder for your modular widgets -->
+        <TextBlock Text="Wice Top Bar" Foreground="White" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
 </Window>
