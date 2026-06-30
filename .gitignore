@@ -1,0 +1,78 @@
+# =========================
+# Build output
+# =========================
+[Bb]in/
+[Oo]bj/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.rsuser
+
+# =========================
+# Rider / ReSharper
+# =========================
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# NuGet
+# =========================
+*.nupkg
+*.snupkg
+
+# Ignore local NuGet cache if created
+packages/
+
+# =========================
+# Publish output
+# =========================
+publish/
+
+# =========================
+# Test Results
+# =========================
+TestResults/
+
+# =========================
+# Coverage
+# =========================
+coverage/
+*.coverage
+*.coveragexml
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# =========================
+# Avalonia Previewer Cache
+# =========================
+*.cache

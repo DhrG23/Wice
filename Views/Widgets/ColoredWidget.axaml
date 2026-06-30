@@ -1,0 +1,6 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Wice.Views.Widgets.ColoredWidget">
+    <!-- Reusable visual component -->
+    <Rectangle Width="60" Height="30" Fill="RoyalBlue" Margin="5" RadiusX="4" RadiusY="4"/>
+</UserControl>
