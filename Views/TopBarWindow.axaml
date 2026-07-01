@@ -2,14 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:widgets="using:Wice.Views.Widgets"
         x:Class="Wice.Views.TopBarWindow"
-        Title="Wice Top Bar" Height="40"
-        SystemDecorations="None" 
+        Title="Wice Top Bar"
+        WindowDecorations="None" 
         Topmost="True"
-        Background="Transparent" 
-        TransparencyLevelHint="Transparent"
+        Background="Black" 
         WindowStartupLocation="Manual">
 
-    <Grid Background="#CC1E1E1E">
+    <Grid Background="#000000">
         <!-- Placeholder for your modular widgets -->
         <TextBlock Text="Wice Top Bar" Foreground="White" 
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>

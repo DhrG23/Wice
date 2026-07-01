@@ -1,22 +1,27 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
-using Wice.Views; // Ensure this matches your folder
+using Wice.Views;
 
 namespace Wice;
 
 public partial class App : Application
 {
-    public override void Initialize() => AvaloniaXamlLoader.Load(this);
-
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // Set the TopBarWindow as the primary window instead of MainWindow
-            desktop.MainWindow = new TopBarWindow();
-        }
+            // Detect all monitors and launch a bar on each
+            var screens = new Window().Screens.All;
+            foreach (var screen in screens)
+            {
+                var topBar = new TopBarWindow(screen);
+                topBar.Show();
+            }
 
+            // Set one as the MainWindow so the app doesn't immediately close
+            // (or set ShutdownMode to OnExplicitShutdown in App.axaml)
+        }
         base.OnFrameworkInitializationCompleted();
     }
 }
