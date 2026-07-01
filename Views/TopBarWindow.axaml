@@ -10,7 +10,7 @@
 
     <Grid Background="#000000">
         <!-- Placeholder for your modular widgets -->
-        <TextBlock Text="Wice Top Bar" Foreground="White" 
+        <TextBlock Text="🪟" Foreground="White" 
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Window>

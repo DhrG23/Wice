@@ -4,26 +4,24 @@ using Avalonia.Platform;
 using System.Runtime.InteropServices;
 using Wice.Native;
 
+
 namespace Wice.Views;
+
 
 public partial class TopBarWindow : Window
 {
     private readonly Screen _targetScreen;
-    private const int DesiredLogicalHeight = 40;
+
 
     public TopBarWindow(Screen screen)
     {
         InitializeComponent();
         _targetScreen = screen;
 
-        // Use physical pixels (PixelPoint) for the initial position
-        // TopLeft is logical, so multiply by Scaling for the PixelPoint
-        var physicalX = (int)(_targetScreen.Bounds.X * _targetScreen.Scaling);
-        var physicalY = (int)(_targetScreen.Bounds.Y * _targetScreen.Scaling);
-        
-        this.Position = new PixelPoint(physicalX, physicalY);
-        this.Width = _targetScreen.Bounds.Width; // Avalonia Width is logical
-        this.Height = DesiredLogicalHeight;     // Avalonia Height is logical
+        // Pin to the correct monitor's coordinates
+        this.Position = _targetScreen.Bounds.Center;
+        this.Width = _targetScreen.Bounds.Width;
+        this.Height = 40;
 
         this.Opened += (s, e) => RegisterAsSystemBar();
     }
@@ -33,9 +31,6 @@ public partial class TopBarWindow : Window
         var hwnd = this.TryGetPlatformHandle()?.Handle;
         if (hwnd == null) return;
 
-        // Get the scaling factor (e.g., 1.5 for 150%)
-        double scale = _targetScreen.Scaling;
-
         var abd = new NativeMethods.APPBARDATA
         {
             cbSize = (uint)Marshal.SizeOf<NativeMethods.APPBARDATA>(),
@@ -43,34 +38,28 @@ public partial class TopBarWindow : Window
             uEdge = 1 // ABE_TOP
         };
 
-        // 1. Register the bar
+        // Tell Windows: "I am a new AppBar"
         NativeMethods.SHAppBarMessage(0, ref abd); // ABM_NEW
 
-        // 2. Calculate PHYSICAL RECT for Win32
-        // We must multiply Avalonia logical pixels by the scale factor
-        int physicalTop = (int)(_targetScreen.Bounds.Y * scale);
-        int physicalLeft = (int)(_targetScreen.Bounds.X * scale);
-        int physicalRight = physicalLeft + (int)(_targetScreen.Bounds.Width * scale);
-        int physicalBottom = physicalTop + (int)(40 * scale); // 40 is our logical height
-
+        // Define your desired area
         abd.rc = new NativeMethods.RECT
         {
-            Left = physicalLeft,
-            Top = physicalTop,
-            Right = physicalRight,
-            Bottom = physicalBottom
+            Left = _targetScreen.Bounds.X,
+            Top = _targetScreen.Bounds.Y,
+            Right = _targetScreen.Bounds.X + (int)this.Width,
+            Bottom = _targetScreen.Bounds.Y + 40
         };
 
-        // 3. Negotiate space (This handles shifting if another bar exists)
+        // Ask Windows: "Is this space okay?"
+        // IMPORTANT: Windows might change abd.rc here if it needs to shift you!
         NativeMethods.SHAppBarMessage(2, ref abd); // ABM_QUERYPOS
+
+        // Tell Windows: "I am taking this (possibly adjusted) space"
         NativeMethods.SHAppBarMessage(3, ref abd); // ABM_SETPOS
 
-        // 4. Update Avalonia Window using the approved PHYSICAL coordinates
-        // PixelPoint is physical, so we use abd.rc directly
+        // Update the Avalonia window to match what Windows approved
         this.Position = new PixelPoint(abd.rc.Left, abd.rc.Top);
-
-        // Width and Height in Avalonia are logical, so we divide back
-        this.Width = (abd.rc.Right - abd.rc.Left) / scale;
-        this.Height = (abd.rc.Bottom - abd.rc.Top) / scale;
+        this.Height = abd.rc.Bottom - abd.rc.Top;
     }
+
 }
