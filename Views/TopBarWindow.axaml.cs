@@ -5,89 +5,65 @@ using System;
 using System.Runtime.InteropServices;
 using Wice.Native;
 
-
 namespace Wice.Views;
-
 
 public partial class TopBarWindow : Window
 {
-    private const int BarHeightDip = 40;
-
     private readonly Screen _targetScreen;
-    private IntPtr _hwnd;
-    private bool _registered;
-
+    private const int DesiredLogicalHeight = 40;
 
     public TopBarWindow(Screen screen)
     {
         InitializeComponent();
         _targetScreen = screen;
 
-        this.Position = _targetScreen.Bounds.Position;
+        // Set initial Logical dimensions
+        this.Width = _targetScreen.Bounds.Width / _targetScreen.Scaling;
+        this.Height = DesiredLogicalHeight;
 
-        var startupScaling = _targetScreen.Scaling <= 0 ? 1.0 : _targetScreen.Scaling;
-        this.Width = _targetScreen.Bounds.Width / startupScaling;
-        this.Height = BarHeightDip;
+        // Initial physical position
+        this.Position = _targetScreen.Bounds.TopLeft;
 
         this.Opened += (s, e) => RegisterAsSystemBar();
-        this.Closing += (s, e) => UnregisterSystemBar();
     }
 
     private void RegisterAsSystemBar()
     {
-        var handle = this.TryGetPlatformHandle()?.Handle;
-        if (handle == null) return;
-        _hwnd = handle.Value;
+        // 1. Get the handle FIRST so it can be used for styles
+        var hwnd = this.TryGetPlatformHandle()?.Handle;
+        if (hwnd == null) return;
 
-        var scaling = this.RenderScaling <= 0 ? 1.0 : this.RenderScaling;
+        // 2. Set ToolWindow style for Virtual Desktop persistence
+        IntPtr currentStyle = NativeMethods.GetWindowLongPtr(hwnd.Value, NativeMethods.GWL_EXSTYLE);
+        NativeMethods.SetWindowLongPtr(hwnd.Value, NativeMethods.GWL_EXSTYLE, currentStyle | (IntPtr)NativeMethods.WS_EX_TOOLWINDOW);
 
+        double scale = _targetScreen.Scaling;
         var abd = new NativeMethods.APPBARDATA
         {
             cbSize = (uint)Marshal.SizeOf<NativeMethods.APPBARDATA>(),
-            hWnd = _hwnd,
+            hWnd = hwnd.Value,
             uEdge = NativeMethods.ABE_TOP
         };
 
-        // Tell Windows: "I am a new AppBar"
+        // 3. Register with Shell
         NativeMethods.SHAppBarMessage(NativeMethods.ABM_NEW, ref abd);
 
-        // Define the desired area entirely in physical pixels (Screen.Bounds is physical,
-        // and so is RECT - never mix in `this.Width`/`this.Height` here, those are DIPs).
-        var barHeightPx = (int)Math.Round(BarHeightDip * scaling);
+        // 4. Define PHYSICAL area (Bounds is already physical)
+        int physicalHeight = (int)(DesiredLogicalHeight * scale);
         abd.rc = new NativeMethods.RECT
         {
             Left = _targetScreen.Bounds.X,
             Top = _targetScreen.Bounds.Y,
-            Right = _targetScreen.Bounds.X + _targetScreen.Bounds.Width,
-            Bottom = _targetScreen.Bounds.Y + barHeightPx
+            Right = _targetScreen.Bounds.Right,
+            Bottom = _targetScreen.Bounds.Y + physicalHeight
         };
 
-        // IMPORTANT: Windows might change abd.rc here if it needs to shift you!
+        // 5. Negotiate and Set Position (Handshake)
         NativeMethods.SHAppBarMessage(NativeMethods.ABM_QUERYPOS, ref abd);
-
-        // Tell Windows: "I am taking this (possibly adjusted) space"
         NativeMethods.SHAppBarMessage(NativeMethods.ABM_SETPOS, ref abd);
 
-        // in sync regardless of monitor DPI.
+        // 6. Update Avalonia Window to match APPROVED space
         this.Position = new PixelPoint(abd.rc.Left, abd.rc.Top);
-        this.Width = 2560;
-        this.Height = (abd.rc.Bottom - abd.rc.Top) / scaling;
-
-        _registered = true;
+        this.Height = (abd.rc.Bottom - abd.rc.Top) / scale; // Convert physical back to logical
     }
-
-    private void UnregisterSystemBar()
-    {
-        if (!_registered || _hwnd == IntPtr.Zero) return;
-
-        var abd = new NativeMethods.APPBARDATA
-        {
-            cbSize = (uint)Marshal.SizeOf<NativeMethods.APPBARDATA>(),
-            hWnd = _hwnd
-        };
-
-        NativeMethods.SHAppBarMessage(NativeMethods.ABM_REMOVE, ref abd);
-        _registered = false;
-    }
-
 }
