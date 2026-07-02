@@ -3,7 +3,7 @@
         xmlns:widgets="using:Wice.Views.Widgets"
         x:Class="Wice.Views.TopBarWindow"
         Title="Wice Top Bar"
-        WindowDecorations="None" 
+        SystemDecorations="None"
         Topmost="True"
         Background="Black" 
         WindowStartupLocation="Manual">
