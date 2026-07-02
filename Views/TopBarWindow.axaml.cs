@@ -34,9 +34,7 @@ public partial class TopBarWindow : Window
 
         // Hide from Alt+Tab & taskbar
         IntPtr currentStyle = NativeMethods.GetWindowLongPtr(hwnd.Value, NativeMethods.GWL_EXSTYLE);
-
-        NativeMethods.SetWindowLongPtr(hwnd.Value, NativeMethods.GWL_EXSTYLE,
-            currentStyle | (IntPtr)NativeMethods.WS_EX_TOOLWINDOW);
+        NativeMethods.SetWindowLongPtr(hwnd.Value, NativeMethods.GWL_EXSTYLE, currentStyle | (IntPtr)NativeMethods.WS_EX_TOOLWINDOW);
 
         var abd = new NativeMethods.APPBARDATA
         {

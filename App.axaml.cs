@@ -33,17 +33,16 @@ public partial class App : Application
 
     public void OnSettingsClick(object? sender, EventArgs e)
     {
-        // Open settings window
+        // Add logic to open settings window
     }
 
     public void OnRestartClick(object? sender, EventArgs e)
     {
-        // Restart logic
+        // Logic to restart the shell
     }
 
     public void OnExitClick(object? sender, EventArgs e)
     {
-        // Properly shut down the app since ShutdownMode is Explicit
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.Shutdown();
