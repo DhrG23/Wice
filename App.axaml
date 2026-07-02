@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:Wice"> 
     <TrayIcon.Icons>
         <TrayIcons>
-            <TrayIcon Icon="/Assets/wice-logo.ico" 
+            <TrayIcon Icon="/Assets/avalonia-logo.ico" 
                       ToolTipText="Wice Shell">
                 <TrayIcon.Menu>
                     <NativeMenu>
