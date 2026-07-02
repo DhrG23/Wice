@@ -32,8 +32,9 @@ public partial class TopBarWindow : Window
         var hwnd = this.TryGetPlatformHandle()?.Handle;
         if (hwnd == null) return;
 
-        // Apply ToolWindow style immediately to fix Virtual Desktop persistence
+        // Hide from Alt+Tab & taskbar
         IntPtr currentStyle = NativeMethods.GetWindowLongPtr(hwnd.Value, NativeMethods.GWL_EXSTYLE);
+
         NativeMethods.SetWindowLongPtr(hwnd.Value, NativeMethods.GWL_EXSTYLE,
             currentStyle | (IntPtr)NativeMethods.WS_EX_TOOLWINDOW);
 
